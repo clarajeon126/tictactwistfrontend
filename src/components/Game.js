@@ -122,24 +122,24 @@ const Game = () => {
   }
 
   //check if game is over
-  const checkEnd = () => {
+  const checkEnd = (xpt, opt) => {
     //game not done yet
     if(boardTemp.includes('e')){
       return '';
     }
     //game is done
     else {
-      let resp = checkWinner();
+      let resp = checkWinner(xpt, opt);
       return resp;
     }
   }
 
   //if game is over, check who won
-  const checkWinner = () => {
-    if(xPts > oPts){
+  const checkWinner = (xpt, opt) => {
+    if(xpt > opt){
       return 'x';
     }
-    else if(oPts > xPts){ 
+    else if(xpt > opt){ 
       return 'o';
     }
     else {
@@ -154,7 +154,7 @@ const Game = () => {
     calcPoints().then((res) => {
       setPrevBoard(board);
       setTurn(turn === 'x' ? 'o' : 'x');
-      let result = checkEnd();
+      let result = checkEnd(res.xPts, res.oPts);
       setWinner(result);
       socket.emit('move_made', {string: boardTemp, winner: result, xPts: res.xPts, oPts: res.oPts});
     });
